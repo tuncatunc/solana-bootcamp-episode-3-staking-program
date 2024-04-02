@@ -38,7 +38,7 @@ describe("staking-program", () => {
 
   it("Is initialized!", async () => {
     // Add your test here.
-    // await createMintToken();
+    //await createMintToken();
     let [vaultAccount] = PublicKey.findProgramAddressSync(
       [Buffer.from("vault")],
       program.programId
@@ -109,4 +109,53 @@ describe("staking-program", () => {
 
     console.log("Your transaction signature", tx);
   })
+
+  it("destake", async () => {
+    let userTokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      wallet.payer,
+      mintKeypair.publicKey,
+      wallet.payer.publicKey
+    );
+
+    let [stakeInfo] = PublicKey.findProgramAddressSync(
+      [Buffer.from("stake_info"), wallet.payer.publicKey.toBuffer()],
+      program.programId
+    );
+
+    let [stakeAccount] = PublicKey.findProgramAddressSync(
+      [Buffer.from("token"), payer.publicKey.toBuffer()],
+      program.programId
+    );
+
+    let [vaultAccount] = PublicKey.findProgramAddressSync(
+      [Buffer.from("vault")],
+      program.programId
+    );
+
+    await mintTo(
+      connection,
+      wallet.payer,
+      mintKeypair.publicKey,
+      vaultAccount,
+      wallet.payer,
+      1e21
+    );
+
+    const tx = await program.methods
+      .destake(new anchor.BN(1))
+      .signers([wallet.payer])
+      .accounts({
+        stakeInfoAccount: stakeInfo,
+        stakeAccount: stakeAccount,
+        userTokenAccount: userTokenAccount.address,
+        tokenVaultAccount: vaultAccount,
+        signer: wallet.payer.publicKey,
+        mint: mintKeypair.publicKey,
+      })
+      .rpc();
+
+    console.log("Your transaction signature", tx);
+  })
+
 });
