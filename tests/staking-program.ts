@@ -54,59 +54,59 @@ describe("staking-program", () => {
     console.log("Your transaction signature", tx);
   });
 
-  // it("stake", async () => {
-  //   let userTokenAccount = await getOrCreateAssociatedTokenAccount(
-  //     connection,
-  //     wallet.payer,
-  //     mintKeypair.publicKey,
-  //     wallet.payer.publicKey
-  //   );
+  it("stake", async () => {
+    let userTokenAccount = await getOrCreateAssociatedTokenAccount(
+      connection,
+      wallet.payer,
+      mintKeypair.publicKey,
+      wallet.payer.publicKey
+    );
 
-  //   await mintTo(
-  //     connection,
-  //     wallet.payer,
-  //     mintKeypair.publicKey,
-  //     userTokenAccount.address,
-  //     wallet.payer,
-  //     100
-  //   );
+    await mintTo(
+      connection,
+      wallet.payer,
+      mintKeypair.publicKey,
+      userTokenAccount.address,
+      wallet.payer,
+      1e11
+    );
 
-  //   let [stakeInfo] = PublicKey.findProgramAddressSync(
-  //     [Buffer.from("stake_info"), wallet.payer.publicKey.toBuffer()],
-  //     program.programId
-  //   );
+    let [stakeInfo] = PublicKey.findProgramAddressSync(
+      [Buffer.from("stake_info"), wallet.payer.publicKey.toBuffer()],
+      program.programId
+    );
 
-  //   let [stakeAccount] = PublicKey.findProgramAddressSync(
-  //     [Buffer.from("token")],
-  //     program.programId
-  //   );
+    let [stakeAccount] = PublicKey.findProgramAddressSync(
+      [Buffer.from("token"), payer.publicKey.toBuffer()],
+      program.programId
+    );
 
-  //   await getOrCreateAssociatedTokenAccount(
-  //     connection,
-  //     wallet.payer,
-  //     mintKeypair.publicKey,
-  //     payer.publicKey
-  //   );
+    await getOrCreateAssociatedTokenAccount(
+      connection,
+      wallet.payer,
+      mintKeypair.publicKey,
+      payer.publicKey
+    );
 
-  //   let [vaultAccount] = PublicKey.findProgramAddressSync(
-  //     [Buffer.from("vault")],
-  //     program.programId
-  //   );
+    let [vaultAccount] = PublicKey.findProgramAddressSync(
+      [Buffer.from("vault")],
+      program.programId
+    );
 
 
 
-  //   const tx = await program.methods
-  //     .stake(new anchor.BN(100))
-  //     .signers([wallet.payer])
-  //     .accounts({
-  //       stakeInfoAccount: stakeInfo,
-  //       stakeAccount: stakeAccount,
-  //       userTokenAccount: userTokenAccount.address,
-  //       mint: mintKeypair.publicKey,
-  //       signer: wallet.payer.publicKey,
-  //     })
-  //     .rpc();
+    const tx = await program.methods
+      .stake(new anchor.BN(1))
+      .signers([wallet.payer])
+      .accounts({
+        stakeInfoAccount: stakeInfo,
+        stakeAccount: stakeAccount,
+        userTokenAccount: userTokenAccount.address,
+        mint: mintKeypair.publicKey,
+        signer: wallet.payer.publicKey,
+      })
+      .rpc();
 
-  //   console.log("Your transaction signature", tx);
-  // })
+    console.log("Your transaction signature", tx);
+  })
 });
