@@ -7,7 +7,7 @@ use anchor_spl::{
 
 use solana_program::clock::Clock;
 
-declare_id!("HyR3CzHu8GvnPeGCbdZwnPM4PnZrDAg38DeJtuF49VSP");
+declare_id!("FiVg5VY1ZDbJHKYqpVfy7dDJ3HGX3PkE4ncKvZZs1nRH");
 
 #[program]
 pub mod staking_program {
@@ -90,7 +90,7 @@ pub struct Stake<'info> {
 
     #[account(
         init_if_needed,
-        seeds = [constants::STAKE_INFO_SEED, signer.key.as_ref()],
+        seeds = [constants::VAULT_SEED, signer.key.as_ref()],
         bump,
         payer = signer,
         space = 8 + std::mem::size_of::<StakeInfo>(),

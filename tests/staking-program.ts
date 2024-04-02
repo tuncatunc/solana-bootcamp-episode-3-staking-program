@@ -6,11 +6,12 @@ import { createMint, getOrCreateAssociatedTokenAccount, mintTo } from "@solana/s
 
 describe("staking-program", () => {
   const provider = anchor.AnchorProvider.env();
-  const wallet = anchor.Wallet.local();
+  const wallet = provider.wallet as anchor.Wallet;
   // Configure the client to use the local cluster.
   anchor.setProvider(provider);
   const payer = wallet.payer;
   const connection = new Connection("http://localhost:8899", "confirmed");
+  // const connection = new Connection("https://api.devnet.solana.com", "confirmed");
   const mintKeypair = anchor.web3.Keypair.fromSecretKey(
     new Uint8Array([
       218, 141, 66, 223, 219, 158, 136, 95, 57, 86, 247,
@@ -37,7 +38,7 @@ describe("staking-program", () => {
 
   it("Is initialized!", async () => {
     // Add your test here.
-    await createMintToken();
+    // await createMintToken();
     let [vaultAccount] = PublicKey.findProgramAddressSync(
       [Buffer.from("vault")],
       program.programId
@@ -47,7 +48,7 @@ describe("staking-program", () => {
       .accounts({
         mint: mintKeypair.publicKey,
         signer: payer.publicKey,
-        tokenVaultAccount: vaultAccount
+        tokenVaultAccount: vaultAccount,
       })
       .rpc();
     console.log("Your transaction signature", tx);
@@ -84,7 +85,7 @@ describe("staking-program", () => {
   //     connection,
   //     wallet.payer,
   //     mintKeypair.publicKey,
-  //     stakeAccount
+  //     payer.publicKey
   //   );
 
   //   let [vaultAccount] = PublicKey.findProgramAddressSync(
